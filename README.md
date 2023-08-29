@@ -1,1 +1,45 @@
-# git_basic
+Git
+# # Key concepts:
+- Distributed/Decentralised (but can be localised)
+- Version snapshots not versioning specific files 
+- Git repository contain files, history, config managed by Git
+- A commit is a group of saved changes to the repo. This impacts history and is uniquely identified by a SHA-1 hash
+- Branches can be thought of as timeline with commits. By default, Master is the main branch
+- Head is a pointer to the last commit on the current branch 
+- Remote is reference to a related repo, something that is not local. Can be on the same network, or on the internet e.g. Github 
+
+# # Git Workflow
+- There are 2 ways to start a Git workflow. local and remote
+- Local: start by initialising the current directory -> work -> then stage changes using “add” command -> “commit” changes from staging -> once ready to collaborate, we “push” changes to remote repo. <- “pull” to update local repo to remote
+- Remote: Set up Github repo, then “clone” locally -> work -> add -> commit -> push
+- Files must pass through Git's staging area before being committed.
+- Git's staging area is sometimes referred to as the index?
+
+- “git help” to get help
+- “git help config” to get help for a specific command
+
+- “git config --global user.name “Hamza Zahir”
+- “git config —global user.email ”smhzahir@googlemail.com”
+- “git config —global —list” to list saved config
+- There are saved in a text file called .gitconfig
+
+- “git commit -a” to commit modified files without adding manually
+- “git commit -m “[message]”” to commit with a message
+- “git status” to see what git is tracking 
+
+# # MSC
+- “git reset HEAD [file]” to unstage file
+- “git checkout — [file]” to discard changes to the last commit
+- “git log” to view a history of the commits
+- “git help log” -> “git log --online --graph --decorate --color” visually easier if you have loads of commits and want to more compact view of history
+
+- “git rm [file]” -> ‘git add” or “rm [file]” -> “git add -u” to remove a file
+- “git mv [file] [dir]” -> ‘git add” or “rm [file] [dir]” -> “git add -u” to move a file
+- We don’t want log files in version control so we add them to the .gitignore file as: “*.log” to ignore all files that end in “.log”. Then add the .gitignore file to version control
+
+- Create a .ssh folder in the home directory “cd ~” -> “mkdir .ssh”
+- “ssh-keygen -t rsa -C "smhzahir@googlemail””
+- Paste the public key into GitHub
+- “ssh -T git@github.com” to verify SSH connection
+
+- The first or primary remote location name used by convention in Git is called origin
