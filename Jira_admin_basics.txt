@@ -1,0 +1,177 @@
+## Jira admin basics
+In Jira, groups are used to manage users access and permissions within projects and across the platform. Users can be grouped based on roles, responsibilities, or common attributes. It simplifies the process of granting/revoking permissions for multiple users at once. - Permission management - Project Access - Global Permissions - Issue assignee and notification - workflow participation - Jira service (desk) management 
+Access projects from setting to have access to admin project menu and see all projects without restrictions
+
+In premium version you have the option to archive a project, normally you can move to trash and there it stays for 60s days, or you can permanently delete it manually from the trash
+
+Jira hierarchy: Jira_instance/project/epics/issue/subtask
+
+Project category to group similar project together, or the same project in different point of its lifecycle. Good for filtering (JQL) and consolidated reporting
+
+Create new project from project drop down/admin settings. Jira provides many different templates and workflows
+
+Changing a project key may break certain filters and dashboards 
+
+Board != project. We can have a board per project, but we can also have boards that connect multiple projects 
+
+## Project settings:
+We can’t just add/remove issue types from a project. In Jira everything is set up in scheme, we make changes to this and all projects using this scheme get amended. Solution —> create a new scheme. Click scheme, actions, use a different scheme.  
+Same as issues, for workflows, use schemes. 
+
+Screens also work in screens, Screens define which screen will be shown for which operation. An operations could be creating a new issue or transitioning issue through the workflow. So a screen is something that appears, not necessarily always.
+
+Versions are tracked inside a project. If you're releasing software, for example, you can create new versions or you can release versions and they act slightly like a similar with epics. So they allow you to group issues together by versions and track the progress on each version.
+
+Versions (aka releases) and components can be managed by project admin 
+
+Permission use schemes as well and are given to groups, these are granular access to each action within a project assign issue, view workflow etc..
+
+Notifications- inform watchers, assignee, reporter of changes to an issue. Also a scheme 
+
+Components are like labels we can put on our issues. Components can only be created by an admin of a project and are specific to a project. A specific component has a defined default assignee, and component lead. Can always filter by components
+
+Releases work like components. Can add a start date and a release date. Versions can be released, unreleased and archived. Can be linked to development tools and have version control for example.
+
+Backlog has an epics panel and a versions panel. You can add issues to versions and filter by versions.  
+
+Only Jira super Admin can access system settings 
+
+You can create a project role, and assign default users/groups to this role. Additionally you can add users to roles from the peoples settings  Why is it recommended to set up company-managed projects over team managed projects? Company-managed allow the reuse of workflows and other settings, team-manages comes with a risk of poor configuration sue to inexperience of team members and company managed has more functionality
+
+## Customisation:
+Negatives: hard to manage, slow Jira down, lowers modularity for new teams, harder to establish compatibility amongst teams
+
+When something is not showing up, we go the board settings e.g. unmapped statuses so map a status to a column in the workflow. 
+You can create workflows from the admin settings either though a diagram or text. There are three statuses in Jira, To Do (grey), In Progress (blue), and completed (green)
+
+Allow users to transition to ‘closed’ in case something happens 
+
+Add your workflow to an existing workflow scheme through the workflow scheme edit settings. Add the workflow to an issue type   Or create a new workflow scheme. This will end up in inactive since no projects are using it. So go to projects -> workflows -> switch schemes 
+
+With workflows, you can set up roles for each transition. When editing the workflow diagram, click the transition and you can edit the triggers, conditions, validators, and Post functions -  triggers are generally from connected development tools such as gitlab integration. Sometimes its best left to manually make the transition change 
+- Conditions specify which conditions must be met before the transition is allowed e.g. user is in certain group or a certain label is attached, or a field has such value
+- validators are there to check whether this transition is possible can give an error, like try and accept condition 
+- post function is the action done after the transition as occurred: e.g. add. Comment, reindex, change assignee 
+
+Edit custom field context: change default value, user filtering to add which user/groups can be assigned to this field if a user field. You can create multiple context for different projects. A project can only belong to one context
+From edit configuration, can create multiple configuration schemes and decide on which projects and issue types to have this custom field assigned
+
+Screens defined what fields you’ll see I certain screens (comment fields are there by default)
+We can associate an issue with a screen (create/edit/view) 
+Issue type screen screen: for each issue type in the project which screen scheme is it going to be associated with 
+1. First create a screen with the required fields
+2. Then go to screen schemes and select the scheme you are using and associate an operation (view/edit/create with the newly created screen alternatively go to workflows and click edit a transition and select the new screen. Now when you move the issue in that transition, you’ll get your new screen  
+## JQL
+JQL allows for precise querying, custom searches, and custom boards based on filters. You can save filters and make amendments to it, and or star them to have them appear on the left panel. Also amend permissions (viewers/editors) n them from details
+You can also export to different formats.
+Click list view, to make changes to which column are visible in list view (and exported file will look)
+To make changes to multiple tickets, use the bulk action option from the list view 
+JQL uses fields to search for issues and operators (<>+~), values, and keywords (AND/OR/ORDERBY) and functions
+Jira suggest option to fill you in, to view the documentation on the function by googling the function 
+Use membersOf(“group”) to search in groups  ORDER BY Rank ASC 
+For single search use = and for multiple operator in (option1, option2, …)
+
+In Jira we can link one issue to another, or an issue (child) to an epic (parent).
+We can also have subtasks (children) under issues (parent)
+A parent can have many children but a child cannily have one parent 
+We can also link issues together by clicking the chain looking icon and selecting a type of link (blocks, clones, relates to…)
+Epic link can be searched as: “Epic link” in (PS-32, PS-4)
+Issues can be searched by links as : issueBlocks, issueClones, issueIsDuplicatedBy
+Whoever you search for more than one word, use quotes as Mira doesn’t handle spaces well e.g. issueLinkType in (duplicates, “is duplicated by”) Alternatively can use issue in linkedIssues(“PS-24”,”duplicates”) 
+Jiia also allows is to look into different timeframes: createdDate >= startOFMonth()
+Can also arrange by dates in table view 
+createdDate >= startOFMonth(“-30”) means start of day, which was 30 days ago == createdDate >= -30d (w = weeks, m = months) Can also give exact dates: createdDate >= 2022-09-13. If you make a mistake, Jira will tell you, green = valid query, red = invalid
+
+For complex queries, OR keyword splits the query, so we use parentheses: a + b * c != (a+b)*c
+Can use line breaks Shift + Enter to make query more readability 
+Can save a master query used in dashboard/boards/reports called “Base”. Then search as: filter “base” AND ….
+
+There are three levels of Hierarchy, epics->issues->subtasks, we can’t groups epics together with another parent, but there is a workaround. (+ labels)
+You can link issues under the epics using a new issue and filter: “Epic link” in (PS-4, PS-6) or “Epic link” in linkedIssues(“new issue”)
+
+## Setting up for a team 
+Create. Board from the three dots on a board. Create a scrum board from an existing saved filter. Can create in personal space or under a project. Can all be changed from under the board settings . Filter should have order by rank ascending 
+Have epics in the filter so that they appear on the board on the left 
+Common problems: issues won’t appear on the board - get the issue of the user and see if the board filter query can find it, if so, then issue with board
+Next check columns -  unmapped statuses
+Make sure to update the columns when you make changes to workflows 
+From board settings can choose which quick filters (based JQL) appear on the board next to search box above columns 
+Card layout - what appears on issues on backlog/active sprints
+Issue details, what you see on the right when you click an issue different from screen scheme, this is built on top of screen schemes
+Status mapping to the active sprint column impacts which status show up on backlog on scrum board
+
+In Kanban boards you have an extra sub filter in the settings 
+You can also choose to hide issues older than a time period, alternatively amend the query 
+Kanban board also has a kanban backlog next to the columns (optional)
+Also in the backlog with scrum you get sprints on top of the backlog box, in Kanban you get to do but you cannot drag issues from backlog to to do - To troubleshoot, open an issue and see if you can move to to do, i.e. workflow allows it 
+For kanban boards its best to set column constraints e.g. limit number of issues in a column. The column turns red but allows you to move issues anyway 
+Swimlanes are horizontal separators e.g. different rows for each assignees, queries, etc. available in both kanban and scrum 
+Unlike scrum, kanban allows you to set up sub-filters to hide issues based on certain parameter (e.g. age)
+
+
+Dashboards are usually managed by teams, not admins. They are great for visualising statistics 
+Dashboards are made by dragging and dropping gadgets in to changeable layouts only after having filters for the right information (some gadgets don’t require filters)
+There is a gadget for showing saved filter results 
+
+Roadmaps in Jira are used to visually communicate project plans, timelines, and feature priorities to stakeholders and team members. Are good for planning
+Best used for waterfall type projects with clear milestones and dates, micro works better for agile methodologies 
+In roadmaps, for epics, we put boxes with start and end dates graphically in the same row 
+On top of this you can also create dependencies, by creating a link between the boxes 
+We put start/end dates for issues but issues must be placed inside sprints (time-boxed iteration during which a development team completes a set of planned tasks)
+Road maps are created per board automatically, boards don’t have to be related to project, they are set up by filters. Road maps are designed for a single project (enterprise version can have multiple projects)
+Epics may not necessarily be milestones
+Issues can only be placed inside sprints
+
+Charts are generated fro each board separately, scrum has more than kanban. So if some issues are not showing on the charts, they will also not be appearing on the board 
+You can refine reports to choose what appears on them 
+May be be a good idea to have a separate board for charts 
+
+In Jira story points are numbers we assign to issues that measure time/effort/uncertainty of an issues. We use them for work planning
+We use a similar scale to the fibonacci scale: 1,2,3,5,8,13,20, 40, 100
+Issues can come with a field that takes this value 
+So usually we measure what is called velocity of the team. (How much work can be done in a sprint)
+So after doing a few sprints and looking at results, we can see that our team can complete 25 story points, roughly about 25 story points within the sprint.
+We could break large issues in to smaller ones, or move them around based on priority 
+When you complete a sprint, you get a sprint report + a status report 
+If you go on back log and you’ll see a progress bar for the sprint as well as stats if you hover over the bar
+
+## Creating a project e.g. 
+1. Create new kanban board managed by team
+2. Amend the issue type scheme as the default doesn’t work for our requirement (remove and add issue types, set default issue type)
+3. Create any custom field and associate it with our screen (check change is made under screens)
+4. Check issue type screen scheme for this project. For default issue type, use default screen scheme by clicking edit. (Default is everything but employee issues.
+5. Then associate employee issue type with our screen scheme, so the customer field only appears when we create an employee issue type
+6. Edit board settings to have the correct columns and statuses
+7. Next workflows: either amend or create, easier to create. Create all statuses and match workflow.
+8. Go to workflow schemes and attach new work flow. Edit existing one, add workflow, select new workflow, add to employee issue type.
+9. Edit default workflow swell to match required, (lira workflow is basic enough) and assign to all unassigned issue types 
+10. For visibility go to permission schemes from Jira admin and add new permission scheme. Amend the scheme by adding a group to certain permissions
+11. Before that go to user management and make a group and add users. 
+12. Then assign the permission scheme to our project (project settings>permissions>actions>use a different scheme>our HR scheme)
+13. Ticket approval can be done in a few ways: components: Create component “Head of HR” from project settings component lead = approver  then edit workflow and click the verify transition from the diagram and add a a post function 
+14. Could also use an automation rule ( plus create subtask for approver)
+
+## MSC 
+- Sometimes components of automation rules happen in parallel
+- Can branch put with conditions in automation
+
+- Project settings>features>pages to get confluence enable then configure 
+- Go to confluence from project> project pages on the left panel 
+- Can create child pages under parent pages in a tree structure  
+- Link pages, embedded Jira charts, Jira filers 
+
+- Audit log in system settings for changes to administrator actions. Export log, change retention period 
+- Project role are for global projects, which groups have access to which product roles 
+- An issue collector allows you to easily gather feedback on any website in the form of Jira issues, even from users who don't have Jira accounts. Set up her project from the project settings 
+- Default user settings like sharing for dashboards and filter from public/private
+- Default dashboard on homepage when you login 
+- Change Jira logo and colours, date&time format
+- Announce banner as notification e.g. maintenance window info 
+- Manual backups, migrate from cloud to cloud, import attachments, avatars, logos
+- Permission and notification checker per user per issue
+
+## Best practices
+set up user groups, so go through user management and set up JIRA groups ahead of time, and then just add groups to different permissions schemes, notification schemes, etc. to enable easy user management. Because if you have groups properly set up across your Jira, then whenever you have a new joiner or someone leaving with team or switching teams, you just have to move this person from one group to another or add them to group or delete them from one group in one place.
+If you don't do it properly, you will have to go through every single project that you have, clean up the permissions, make sure the user is no longer there.
+
+
